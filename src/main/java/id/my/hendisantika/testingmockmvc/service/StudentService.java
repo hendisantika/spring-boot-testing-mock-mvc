@@ -25,4 +25,10 @@ public class StudentService {
         students.add(student);
         return students;
     }
+
+    public Student saveStudent(Student student) {
+        student.setId(1);
+        student.setName("Mike");
+        return student;
+    }
 }
