@@ -1,6 +1,10 @@
 package id.my.hendisantika.testingmockmvc.service;
 
+import id.my.hendisantika.testingmockmvc.entity.Student;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,4 +19,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class StudentService {
+    public List<Student> getStudents() {
+        List<Student> students = new ArrayList<>();
+        Student student = new Student();
+        students.add(student);
+        return students;
+    }
 }
