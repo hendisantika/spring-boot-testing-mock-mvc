@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,5 +40,11 @@ public class StudentController {
     public ResponseEntity<Student> saveStudent(@RequestBody Student student) {
         student = studentService.saveStudent(student);
         return new ResponseEntity<>(student, HttpStatus.CREATED);
+    }
+
+    @PutMapping(URIConstant.PUT_MAPPING)
+    public ResponseEntity<Student> putExample(@RequestBody Student student) {
+        student = studentService.updateStudent(student);
+        return new ResponseEntity<>(student, HttpStatus.OK);
     }
 }
