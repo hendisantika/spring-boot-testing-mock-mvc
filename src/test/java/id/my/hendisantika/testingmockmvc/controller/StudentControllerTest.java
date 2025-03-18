@@ -15,12 +15,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.RequestEntity.post;
 import static org.springframework.http.RequestEntity.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -81,5 +84,14 @@ class StudentControllerTest {
                         .content(json).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", Matchers.equalTo(2)))
                 .andExpect(jsonPath("$.name", Matchers.equalTo("Geto")));
+    }
+
+    @Test
+    public void testDeleteExample() throws Exception {
+        Mockito.when(studentService.deleteStudent(ArgumentMatchers.anyString())).thenReturn("Student is deleted");
+        MvcResult requestResult = mockMvc.perform(delete(URIConstant.DELETE_MAPPING).param("student-id", "1"))
+                .andExpect(status().isOk()).andExpect(status().isOk()).andReturn();
+        String result = requestResult.getResponse().getContentAsString();
+        assertEquals(result, "Student is deleted");
     }
 }
