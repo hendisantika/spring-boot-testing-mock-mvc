@@ -31,4 +31,10 @@ public class StudentService {
         student.setName("Mike");
         return student;
     }
+
+    public Student updateStudent(Student student) {
+        student.setId(2);
+        student.setName("John");
+        return student;
+    }
 }
