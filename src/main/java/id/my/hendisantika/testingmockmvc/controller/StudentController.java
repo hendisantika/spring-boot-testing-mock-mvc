@@ -1,8 +1,15 @@
 package id.my.hendisantika.testingmockmvc.controller;
 
+import id.my.hendisantika.testingmockmvc.constants.URIConstant;
+import id.my.hendisantika.testingmockmvc.entity.Student;
 import id.my.hendisantika.testingmockmvc.service.StudentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,4 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class StudentController {
     private final StudentService studentService;
+
+    @GetMapping(URIConstant.GET_MAPPING)
+    public ResponseEntity<List<Student>> getStudents() {
+        List<Student> students = studentService.getStudents();
+        return new ResponseEntity<>(students, HttpStatus.OK);
+    }
 }
