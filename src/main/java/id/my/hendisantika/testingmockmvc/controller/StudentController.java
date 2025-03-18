@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -31,5 +33,11 @@ public class StudentController {
     public ResponseEntity<List<Student>> getStudents() {
         List<Student> students = studentService.getStudents();
         return new ResponseEntity<>(students, HttpStatus.OK);
+    }
+
+    @PostMapping(URIConstant.POST_MAPPING)
+    public ResponseEntity<Student> saveStudent(@RequestBody Student student) {
+        student = studentService.saveStudent(student);
+        return new ResponseEntity<>(student, HttpStatus.CREATED);
     }
 }
