@@ -37,4 +37,8 @@ public class StudentService {
         student.setName("John");
         return student;
     }
+
+    public String deleteStudent(String studentId) {
+        return "Student is deleted";
+    }
 }
