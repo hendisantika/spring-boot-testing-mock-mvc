@@ -14,7 +14,7 @@
     <name>spring-boot-testing-mock-mvc</name>
     <description>spring-boot-testing-mock-mvc</description>
     <properties>
-        <java.version>23</java.version>
+        <java.version>21</java.version>
         <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
     </properties>
     <dependencies>
