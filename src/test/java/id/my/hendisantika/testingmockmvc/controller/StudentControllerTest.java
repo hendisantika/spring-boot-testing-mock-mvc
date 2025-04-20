@@ -1,19 +1,18 @@
 package id.my.hendisantika.testingmockmvc.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import id.my.hendisantika.testingmockmvc.SpringBootTestingMockMvcApplication;
-import id.my.hendisantika.testingmockmvc.constants.URIConstant;
 import id.my.hendisantika.testingmockmvc.entity.Student;
 import id.my.hendisantika.testingmockmvc.service.StudentService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -39,15 +38,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Time: 08.51
  * To change this template use File | Settings | File Templates.
  */
-@WebMvcTest
-@ContextConfiguration(classes = SpringBootTestingMockMvcApplication.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 class StudentControllerTest {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     private MockMvc mockMvc;
 
-    @Mock
+    @Autowired
     private StudentService studentService;
 
     @Test
@@ -58,7 +57,8 @@ class StudentControllerTest {
         student.setName("Yuji");
         students.add(student);
         Mockito.when(studentService.getStudents()).thenReturn(students);
-        mockMvc.perform(get(URIConstant.GET_MAPPING))
+        System.out.println("[DEBUG_LOG] Testing GET endpoint: /api/students");
+        mockMvc.perform(get("/api/students"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", Matchers.hasSize(1)))
                 .andExpect(jsonPath("$[0].name", Matchers.equalTo("Yuji")));
@@ -72,7 +72,7 @@ class StudentControllerTest {
         Mockito.when(studentService.saveStudent(ArgumentMatchers.any())).thenReturn(student);
         String json = mapper.writeValueAsString(student);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(URIConstant.POST_MAPPING)
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/students")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json.getBytes(StandardCharsets.UTF_8))
                         .accept(MediaType.APPLICATION_JSON))
@@ -88,7 +88,7 @@ class StudentControllerTest {
         student.setName("Geto");
         Mockito.when(studentService.updateStudent(ArgumentMatchers.any())).thenReturn(student);
         String json = mapper.writeValueAsString(student);
-        mockMvc.perform(MockMvcRequestBuilders.put(URIConstant.PUT_MAPPING)
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/students")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json.getBytes(StandardCharsets.UTF_8))
                         .accept(MediaType.APPLICATION_JSON))
@@ -100,9 +100,17 @@ class StudentControllerTest {
     @Test
     public void testDeleteExample() throws Exception {
         Mockito.when(studentService.deleteStudent(ArgumentMatchers.anyString())).thenReturn("Student is deleted");
-        MvcResult requestResult = mockMvc.perform(delete(URIConstant.DELETE_MAPPING).param("student-id", "1"))
+        MvcResult requestResult = mockMvc.perform(delete("/api/students").param("student-id", "1"))
                 .andExpect(status().isOk()).andExpect(status().isOk()).andReturn();
         String result = requestResult.getResponse().getContentAsString();
         assertEquals(result, "Student is deleted");
+    }
+
+    @TestConfiguration
+    static class TestConfig {
+        @Bean
+        public StudentService studentService() {
+            return Mockito.mock(StudentService.class);
+        }
     }
 }

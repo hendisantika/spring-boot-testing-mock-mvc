@@ -1,6 +1,5 @@
 package id.my.hendisantika.testingmockmvc.controller;
 
-import id.my.hendisantika.testingmockmvc.constants.URIConstant;
 import id.my.hendisantika.testingmockmvc.entity.Student;
 import id.my.hendisantika.testingmockmvc.service.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -32,25 +31,25 @@ import java.util.List;
 public class StudentController {
     private final StudentService studentService;
 
-    @GetMapping(URIConstant.GET_MAPPING)
+    @GetMapping("/api/students")
     public ResponseEntity<List<Student>> getStudents() {
         List<Student> students = studentService.getStudents();
         return new ResponseEntity<>(students, HttpStatus.OK);
     }
 
-    @PostMapping(URIConstant.POST_MAPPING)
+    @PostMapping("/api/students")
     public ResponseEntity<Student> saveStudent(@RequestBody Student student) {
         student = studentService.saveStudent(student);
         return new ResponseEntity<>(student, HttpStatus.CREATED);
     }
 
-    @PutMapping(URIConstant.PUT_MAPPING)
+    @PutMapping("/api/students")
     public ResponseEntity<Student> putExample(@RequestBody Student student) {
         student = studentService.updateStudent(student);
         return new ResponseEntity<>(student, HttpStatus.OK);
     }
 
-    @DeleteMapping(URIConstant.DELETE_MAPPING)
+    @DeleteMapping("/api/students")
     public ResponseEntity<String> deleteExample(@RequestParam("student-id") String studentId) {
         String response = studentService.deleteStudent(studentId);
         return new ResponseEntity<>(response, HttpStatus.OK);
